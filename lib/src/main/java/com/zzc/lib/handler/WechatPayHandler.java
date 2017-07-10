@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.ThreadMode;
  * Time : 2017/6/15
  * Email : zzc1259@163.com
  * Description : ${desc}
+ * todo 待验证
  */
 
 public class WechatPayHandler extends AbsPayHandler<WechatOrderGenerator> {
