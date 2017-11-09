@@ -20,6 +20,10 @@ import java.lang.annotation.RetentionPolicy;
 public class PayManager {
     public static final int ALIPAY = 1;
     public static final int WECHAT = 2;
+    /**
+     * 微信支付结果广播
+     */
+    public static final String ACTION_WECHAT = "com.zzc.pay.WECHAT_ACTION";
     private final AbsPayHandler mPayHandler;
 
     @IntDef({WECHAT, ALIPAY})

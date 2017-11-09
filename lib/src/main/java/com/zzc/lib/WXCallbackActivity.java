@@ -3,6 +3,7 @@ package com.zzc.lib;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
@@ -10,9 +11,8 @@ import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.zzc.lib.event.WechatPayEvent;
-
-import org.greenrobot.eventbus.EventBus;
+import com.zzc.lib.handler.WechatPayHandler;
+import com.zzc.lib.model.WechatPayResult;
 
 
 public abstract class WXCallbackActivity extends Activity implements IWXAPIEventHandler {
@@ -40,7 +40,10 @@ public abstract class WXCallbackActivity extends Activity implements IWXAPIEvent
     @Override
     public void onResp(BaseResp resp) {
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-            EventBus.getDefault().post(new WechatPayEvent(resp.errCode == 0 ? true : false, ""));
+            LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
+            Intent intent = new Intent(PayManager.ACTION_WECHAT);
+            intent.putExtra(WechatPayHandler.WX_PAY_KEY,new WechatPayResult(resp.errCode==0,resp.transaction));
+            manager.sendBroadcast(intent);
             finish();
         }
     }

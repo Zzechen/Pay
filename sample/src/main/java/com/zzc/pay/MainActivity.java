@@ -14,6 +14,7 @@ import com.zzc.lib.order.WechatOrderGenerator;
 public class MainActivity extends AppCompatActivity implements ResultListener {
 
     private TextView tvResult;
+    private PayManager mPayManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,8 @@ public class MainActivity extends AppCompatActivity implements ResultListener {
         findViewById(R.id.btn_wx).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PayManager payManager = new PayManager(PayManager.WECHAT);
+                tvResult.setText("结果");
+                mPayManager = new PayManager(PayManager.WECHAT);
                 WeChatReq req = new WeChatReq();
                 req.setAppId("wxd930ea5d5a258f4f");
                 req.setPartnerId("1900000109");
@@ -31,16 +33,17 @@ public class MainActivity extends AppCompatActivity implements ResultListener {
                 req.setPackageValue("Sign=WXPay");
                 req.setSign("7FFECB600D7157C5AA49810D2D8F28BC2811827B");
                 req.setTimeStamp("1398746574");
-                payManager.pay(MainActivity.this, new WechatOrderGenerator(req));
-                payManager.setResultListener(MainActivity.this);
+                mPayManager.pay(MainActivity.this, new WechatOrderGenerator(req));
+                mPayManager.setResultListener(MainActivity.this);
             }
         });
         findViewById(R.id.btn_alipay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PayManager payManager = new PayManager(PayManager.ALIPAY);
-                payManager.pay(MainActivity.this, new AlipayOrderGenerator("content"));
-                payManager.setResultListener(MainActivity.this);
+                tvResult.setText("结果");
+                mPayManager = new PayManager(PayManager.ALIPAY);
+                mPayManager.pay(MainActivity.this, new AlipayOrderGenerator("content"));
+                mPayManager.setResultListener(MainActivity.this);
             }
         });
         tvResult = (TextView) findViewById(R.id.tv_result);
@@ -54,5 +57,13 @@ public class MainActivity extends AppCompatActivity implements ResultListener {
     @Override
     public void onFail() {
         tvResult.setText("error");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mPayManager != null) {
+            mPayManager.release();
+        }
     }
 }

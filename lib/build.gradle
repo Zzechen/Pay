@@ -31,7 +31,4 @@ dependencies {
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     compile files('libs/alipaySingle-20170510.jar')
     compile 'com.google.code.gson:gson:2.8.1'
-
-    compile 'org.greenrobot:eventbus:3.0.0'
-
 }
